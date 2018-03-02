@@ -1,0 +1,179 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{amsthm, amssymb,amsmath}
+\usepackage{mathrsfs}
+\usepackage{mathtools}
+\usepackage{pgfplots}
+\usepackage{todonotes}
+\usepackage{dsfont}
+\usepackage{enumitem}
+\usepackage[capitalise,nameinlink]{cleveref}
+\usetikzlibrary{shapes}
+
+
+\renewcommand{\:}{\mathrel{\coloneqq}}
+\renewcommand{\=}{\ensuremath{\eqqcolon}}
+\renewcommand{\epsilon}{\varepsilon}
+\usepackage[caption=false, font=normalsize, labelfont=sf, textfont=sf]{subfig}
+\newcommand{\dd}{\ensuremath{\,\mathrm{d}}}
+\newcommand{\ddt}{\ensuremath{\tfrac{\dd}{\dd t}}}
+
+\newcommand{\R}{\ensuremath{\mathbb{R}}}
+\newcommand{\N}{\ensuremath{\mathbb{N}}}
+
+\newcommand{\rr}{\text{r}}
+\newcommand{\nr}{\text{nr}}
+
+\date{\today}
+\newtheorem{Definition}{Definition}
+\newtheorem{Routing}{Routing}
+\newtheorem{Results}{Results}
+\newtheorem{Lemma}{Lemma}
+\newtheorem{Corollary}{Corollary}
+\newtheorem{Assumption}{Assumption}
+
+\newtheorem{Remark}{Remark}
+\newtheorem{Example}{Example}
+\newtheorem{Theorem}{Theorem}
+\newtheorem{Challenge}{Challenge}
+\newtheorem{Proposition}{Proposition}
+
+\newcommand{\0}{\ensuremath{\boldsymbol{0}}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\V}{\mathcal{V}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\T}{\mathcal{T}}
+
+\newcommand{\fR}{\mathfrak{R}}
+\newcommand{\fRD}{\mathfrak{RD}}
+\newcommand{\fRL}{\mathfrak{RL}}
+\newcommand{\fRU}{\mathfrak{RU}}
+
+
+\newcommand{\source}{\mathcal O}
+\newcommand{\sink}{\mathcal D}
+\newcommand{\OD}{\source\sink}
+\newcommand{\Aout}{\mathcal{A}_{\textnormal{out}}}
+\newcommand{\Ain}{\mathcal{A}_{\textnormal{in}}}
+\newcommand{\vout}{v_{\text{tail}}}
+\newcommand{\vin}{v_{\text{head}}}
+\newcommand{\paths}{\mathcal{P}}
+\newcommand{\bx}{\boldsymbol{x}}
+\newcommand{\bg}{\boldsymbol{g}}
+\newcommand{\bu}{\boldsymbol{u}}
+\newcommand{\btau}{\boldsymbol{\tau}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\bb}{\boldsymbol{b}}
+\newcommand{\bh}{\boldsymbol{h}}
+\newcommand{\bk}{\boldsymbol{k}}
+\newcommand{\bm}{\boldsymbol{m}}
+\newcommand{\bp}{\boldsymbol{p}}
+\newcommand{\bs}{\boldsymbol{s}}
+\newcommand{\bX}{\boldsymbol{X}}
+\newcommand{\app}{\text{r}}
+\newcommand{\napp}{\text{nr}}
+\newcommand{\shortp}{\mathcal{Y}}
+\newcommand{\ord}{\boldsymbol{\text{Ord}}}
+\newcommand{\e}{\mathrm{e}}
+\DeclareMathOperator*{\argmin}{arg\,\min}
+\newcommand{\ext}{\textbf{\textnormal{ext}}}
+
+
+\newcommand{\Id}{\mathrm{Id}}
+\newcommand{\bcX}{\boldsymbol{\mathcal{X}}}
+\newcommand{\Int}{\ensuremath{\int\limits}}
+
+\newcommand{\len}{\textnormal{len}}
+\newcommand{\todoAll}[1]{\todo[inline,color=red!30!yellow]{All: #1}}
+\begin{document}
+
+\title{A software framework for solving dynamic traffic assignment\\
+{\footnotesize \textsuperscript}
+\thanks{Identify applicable funding agency here. If none, delete this.}
+}
+
+\author{\IEEEauthorblockN{First author given Name Surname}
+\IEEEauthorblockA{\textit{dept. name of organization (of Aff.)} \\
+\textit{name of organization (of Aff.)}\\
+City, Country \\
+email address}}
+
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\begin{IEEEkeywords}
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+\section{Variational Inequality for DTA}
+
+\section{Software Framework Description}
+
+\section{Traffic Models}
+\subsection{Static Model}
+\subsection{MN Model}
+\subsection{Point Queue Model}
+
+\section{Implemented Algorithms}
+
+\subsection{Method of Successive Averages}
+The Method of Successive Averages is a heuristic-based algorithm and does not put any restriction on $F$. However,it does not guarantee convergence to the optimal solution for the general VI problem \cite{nie2010solving}. The algorithm's steps are described below:
+\begin{enumerate}
+    \item Start with a feasible assignment $h^1$ and set $k=1$.
+    \item Calculate the all-or-nothing assignment $y^k$.
+    \item If ${\frac {\langle F(h^k),y^k-x^k \rangle} {\langle y^k, F(x^k)\rangle}} \leq
+    \epsilon$, stop. Otherwise, go to step 4.
+    \item set $\alpha = 1/k$, and $h^{k+1} = (1-\alpha)h^k + \alpha y^k$. 
+    \item Set $k = k+1$ and go back to step 2.
+\end{enumerate}
+
+\subsection{Frank-Wolfe Algorithm}
+The Frank-Wolfe Algorithm applies when $F$ is convex and continuously differentiable. It has the following steps:
+\begin{enumerate}
+\item Start with a feasible assignment $h^1$ and set $k=1$.
+\item Determine the all-or-nothing assignment $y^k$ given the current assignment $h^k$.
+\item Terminate if $\nabla F(h^k)(h^k-y^k) \leq \epsilon$ stop; otherwise, go to step 4.
+\item Calculate $d^k = y^k - h^k$
+\item Set $h^{k+1} = h^k +\alpha d^k$, where $\alpha$ is a solution the one-dimensional problem: $\min_{0 \leq \alpha \leq 1}G(h^k + \alpha d^k)$ and $G = \int_h F$.
+\item Set $k = k+1$ and go back to step 2.
+\end{enumerate}
+
+\subsection{Extra Projection Method}
+The Extra Projection Method (EPM) is based on the Euclidean Projection define as $\Pi_\mathcal{H} = argmin\{\lVert h-h^0\rVert:h \in\mathcal{H} \}$ and $\lVert.\rVert$ is the Euclidean norm. The EPM guarantees convergence when $F$ is Lipschitz continuous and pseudo monotone \cite{nie2010solving}. The EPM steps are described below:
+\begin{enumerate}
+\item Start with a feasible assignment $h^1$ and set $k=1$.
+\item If ${\frac {\langle F(h^k),y^k-x^k \rangle} {\langle y^k, F(x^k)\rangle}} \leq \epsilon$, where $y^k$ is the all-or-nothing assignment, then stop. Otherwise, go to step 3.
+\item Find $z^k = \Pi_\mathcal{H}(h^k - \tau F(h^k))$, , where $\tau < L$ and $L$ is the Lipschitz constant for $F$.
+\item Find $h^{k+1} = \Pi_\mathcal{H}(h^k - \tau F(z^k))$, where $\tau$ is a above.
+\item Set $k = k+1$ and go back to step 2.
+\end{enumerate}
+
+Since $L$ can be difficult to predetermine in practice, \cite{nie2010solving} propose the following algorithm to update $\tau$ after obtaining solution $h^{k+1}$:
+\begin{enumerate}
+    \item Evaluate $\phi(h^{k+1})$ and $\phi(h^k)$, where $\phi(h)$ is the all-or-nothing assignment given $h$.
+    \item if $\phi(h^{k+1})-\phi(h^k) < 0$ and $\frac{|\phi(h^{k+1})-\phi(h^k)|}{|\phi(h^k)|}> \epsilon$, set $\tau = \tau \times \sigma$, where $\epsilon$ and $\sigma$ are positive scalars between 0 and 1.
+\end{enumerate}
+
+\section{Numerical Results}
+
+\section{Conclusions}\label{sec:concl}
+
+\section*{Acknowledgment}
+
+
+\bibliographystyle{alpha}
+\bibliography{citation.bib}
+
+\end{document}
