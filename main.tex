@@ -117,11 +117,33 @@ email address}}
 
 \section{Introduction}
 
+Paper contributions:
+\begin{enumerate}
+    \item Unification of traffic assignment problems under a clear variational inequality formulation (with good notation).
+    \item A modular software framework with solvers based on the unified variational inequality formulation.
+    \item Demonstration of the performance of the software framework using different models.
+\end{enumerate}
+
 \section{Variational Inequality for DTA}
 
 \section{Software Framework Description}
 
-\section{Traffic Models}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{Class_Diagram.PNG}
+    \caption{Software Framework Architecture}
+    \label{fig:class_diagram}
+\end{figure}
+
+Using the unified VI DTA formulation, we designed a modular and extendable software framework to solve DTA problems. As shown in Figure~\ref{fig:class_diagram}, the software framework has two main modules: the Model Manager and the Solver modules. The Demand Assignment and Path Costs components serve to encode the input/output messages between the Model Manager and Solver.
+
+The Model Manager has three components that correspond to the $F = \Sigma\circ c \circ \mathbb{T}$ composition function: the Traffic Model, Cost Function and Sum components. It also uses the State Trajectory module to encode the link states (e.g: flow per link), and the Link Cost module to represent the travel cost per link (e.g experienced travel time on a link). The Model Manager's role is to translate an assignment $h$, specified as a sequence of demand per path by the Demand Assignment module, into the corresponding path costs, represented as a sequence of cost per path.
+
+The Solver module serves as an interface to plug in solution algorithms for DTA. Given an assignment $h'$, a DTA solution algorithm needs the cost for each path, $F_p(h^')$ $\forall p\in\mathcal{P}$, to determine if $h'$ is an equilibrium assignment according to equation (x). Accordingly, a DTA solution algorithm implemented in the framework will use the Model Manager module via Solver interface to translate assignments to their corresponding path costs $F(h)$. The path costs allow the algorithm to determine whether it has reached equilibrium or whether/how it needs to adjust its current assignment to move towards the equilibrium state. 
+
+The advantage of our modular software framework is that it can be easily extended to address different DTA problems. We implemented the Traffic Model and Cost Function components as interfaces, enabling a user to plug in different traffic models and cost functions respectively. For example, the software framework currently include three traffic models: the static model, Merchant and Nemhauser (MN) model, and the Point Queue Model, which all integrate in the framework via the Traffic Model component. The framework has a travel time based cost function that connect to the framework through the Cost Function module. A user can add an energy or emission based cost function. As previously mentioned, the Solver module is also an interface that allow to incorporate different DTA solution algorithm. We included three solver algorithms: the Method of Successive Averages, the Frank-Wofle Algorithm, and the Extra Projection Methods, which can be applied depending on the $F$ function properties. Finally, we also designed the whole Model Manager component as an interface, enabling a user to integrate an implementation of the $F$ composition function without having to use the Traffic model, Cost Function and Sum modules. This is useful for problems, such as simulaton-based DTA problems, where the traffic model is tightly coupled with the cost function evaluation. The complete documentation on software framework, with installations instructions can be found at ...
+
+\section{Implemented Traffic Models}
 \subsection{Static Model}
 \subsection{MN Model}
 \subsection{Point Queue Model}
@@ -129,7 +151,7 @@ email address}}
 \section{Implemented Algorithms}
 
 \subsection{Method of Successive Averages}
-The Method of Successive Averages is a heuristic-based algorithm and does not put any restriction on $F$. However,it does not guarantee convergence to the optimal solution for the general VI problem \cite{nie2010solving}. The algorithm's steps are described below:
+The Method of Successive Averages (MSA) is a heuristic-based algorithm and does not put any restriction on $F$. However, it does not guarantee convergence to the optimal solution for the general VI problem \cite{nie2010solving}. MSA is used to initialize the other algorithms. The algorithm's steps are described below:
 \begin{enumerate}
     \item Start with a feasible assignment $h^1$ and set $k=1$.
     \item Calculate the all-or-nothing assignment $y^k$.
@@ -140,9 +162,9 @@ The Method of Successive Averages is a heuristic-based algorithm and does not pu
 \end{enumerate}
 
 \subsection{Frank-Wolfe Algorithm}
-The Frank-Wolfe Algorithm applies when $F$ is convex and continuously differentiable. It has the following steps:
+The Frank-Wolfe Algorithm (FW) applies when $F$ is convex and continuously differentiable \cite{fukushima1984modified,gartner1977analysis}. It has the following steps:
 \begin{enumerate}
-\item Start with a feasible assignment $h^1$ and set $k=1$.
+\item Start with a feasible assignment $h^1$, obtained using the Method of Successive Averages. Set $k=1$.
 \item Determine the all-or-nothing assignment $y^k$ given the current assignment $h^k$.
 \item Terminate if $\nabla F(h^k)(h^k-y^k) \leq \epsilon$ stop; otherwise, go to step 4.
 \item Calculate $d^k = y^k - h^k$
@@ -153,7 +175,7 @@ The Frank-Wolfe Algorithm applies when $F$ is convex and continuously differenti
 \subsection{Extra Projection Method}
 The Extra Projection Method (EPM) is based on the Euclidean Projection define as $\Pi_\mathcal{H} = argmin\{\lVert h-h^0\rVert:h \in\mathcal{H} \}$ and $\lVert.\rVert$ is the Euclidean norm. The EPM guarantees convergence when $F$ is Lipschitz continuous and pseudo monotone \cite{nie2010solving}. The EPM steps are described below:
 \begin{enumerate}
-\item Start with a feasible assignment $h^1$ and set $k=1$.
+\item Start with a feasible assignment $h^1$, obtained using the Method of Successive Averages. Set $k=1$.
 \item If ${\frac {\langle F(h^k),y^k-x^k \rangle} {\langle y^k, F(x^k)\rangle}} \leq \epsilon$, where $y^k$ is the all-or-nothing assignment, then stop. Otherwise, go to step 3.
 \item Find $z^k = \Pi_\mathcal{H}(h^k - \tau F(h^k))$, , where $\tau < L$ and $L$ is the Lipschitz constant for $F$.
 \item Find $h^{k+1} = \Pi_\mathcal{H}(h^k - \tau F(z^k))$, where $\tau$ is a above.
