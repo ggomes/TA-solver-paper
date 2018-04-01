@@ -94,11 +94,15 @@
 
 \newcommand{\len}{\textnormal{len}}
 \newcommand{\todoAll}[1]{\todo[inline,color=red!30!yellow]{All: #1}}
+
+\newcommand{\xslnote}[1]{{\bf\color{red}(#1 -- Sherry)}}
+
 \begin{document}
 
 \title{A software framework for solving dynamic traffic assignment\\
-{\footnotesize \textsuperscript}
-\thanks{Identify applicable funding agency here. If none, delete this.}
+%{\footnotesize \textsuperscript}
+\thanks{This work is supported in part by the Office of Science of the
+ U.S.~Department of Energy under contract No.~DE-AC02-05CH11231.}
 }
 
 \author{\IEEEauthorblockN{First author given Name Surname}
@@ -120,12 +124,13 @@ email address}}
  
 Though the theory of DTA is still relatively undeveloped, variational inequality (VI) has proven to provide a unified formulation to address various classes of equilibrium and equivalent optimization problems in the DTA context. VI formulations can model more realistic traffic scenario by bypassing the issues of solution intractability in DTA problems with asymmetric link interactions associated with other analytical DTA methods such as mathematical programming and optimal control formulations . In addition, VI's extension and sensitivity analysis can be conveniently performed \cite{peeta2001foundations}. In this paper, we extend VI formulation to unify analytical DTA models with simulation-based DTA models. Simulation-based DTA methods compliment analytical techniques by addressing the shortcomings of analytical link models and exit functions in reproducing dynamic traffic interactions, satisfying First-In-Fist-Out property, and replicating complex vehicles and multi-user class interactions.
 
-Using this general DTA VI formulation, we created a modular and extendable software framework, \textit{ta\_solver} to solve DTA problems. There exist many commercial and scientific DTA software tools that uses simulation-based models such as CONTRAM \cite{taylor2003contram}, DTALite \cite{zhou2014dtalite}, Dynameq \cite{mahut2010traffic}, DynaMIT-P \cite{DynaMIT,ben2001dynamit}, DYNASMART-P \cite{DYNASMART,mahmassani2004dynasmart}, DynusT \cite{chiu2011dynust}, INTEGRATION \cite{rakha2012integration}, and TransDNA \cite{TransDNA}. To the best of our knowledge, our software is first to combine simulation-based DTA models with analytical methods including mathematical programming and optimal control into one software platform, using a clear underlying VI DTA formulation. The general VI formulation determines the overall software architecture, but also provide a way to incorporate any type of DTA problem that can be represented with VI. Ziliaskopoulos and Waller developed VISTA, a internet-based geographic information system that integrates transportation spatio-temporal data and models into a single framework. While VISTA does integrate analytical and simulation-based DTA models and DTA solution algorithms, it was built with particular focus on the integration of different transportation modules, unlike \textit{ta\_solver} that was designed to solve DTA problems. In addition, VISTA has no fundamental DTA problem formulation, while \textit{ta\_solver} is based on VI. 
-
-Hence, our papers contributions include:
+Using this general DTA VI formulation, we created a modular and extendable software framework, \textit{ta\_solver} to solve DTA problems. There exist many commercial and scientific DTA software tools that uses simulation-based models such as CONTRAM \cite{taylor2003contram}, DTALite \cite{zhou2014dtalite}, Dynameq \cite{mahut2010traffic}, DynaMIT-P \cite{DynaMIT,ben2001dynamit}, DYNASMART-P \cite{DYNASMART,mahmassani2004dynasmart}, DynusT \cite{chiu2011dynust}, INTEGRATION \cite{rakha2012integration}, and TransDNA \cite{TransDNA}. To the best of our knowledge, our software is the first
+to combine simulation-based DTA models with analytical methods including mathematical programming and optimal control into one software platform, using a clear underlying VI DTA formulation. The general VI formulation determines the overall software architecture, but also provide a way to incorporate any type of DTA problem that can be represented with VI. Ziliaskopoulos and Waller developed VISTA,
+an internet-based geographic information system that integrates transportation spatio-temporal data and models into a single framework. While VISTA does integrate analytical and simulation-based DTA models and DTA solution algorithms, it was built with particular focus on the integration of different transportation modules, unlike \textit{ta\_solver} that was designed to solve DTA problems. In addition, VISTA has no fundamental DTA problem formulation, while \textit{ta\_solver} is based on VI. 
+Hence, our contributions include:
 \begin{enumerate}
     \item A clear and unified variational inequality formulation for traffic assignment problems (with good notation).
-    \item A modular software framework,\textit{ta\_solver},  with solvers based on the unified variational inequality formulation.
+    \item A modular software framework, \textit{ta\_solver},  with solvers based on the unified variational inequality formulation.
     \item Demonstration of the performance of the software framework using different models.
 \end{enumerate}
 
@@ -140,7 +145,8 @@ Hence, our papers contributions include:
     \label{fig:Block_Diagram}
 \end{figure}
 
-Using the unified VI DTA formulation, we designed a modular and extendable software framework to solve DTA problems. As shown in Figure~\ref{fig:Block_Diagram}, the software framework has two main modules: the Model Manager and the Solver modules. The Demand Assignment and Path Costs components are wrappers for an assignment per path, commodity and time, and for path travel costs respectively.
+Using the unified VI DTA formulation, we designed a modular and extensible
+software framework to solve DTA problems. As shown in Figure~\ref{fig:Block_Diagram}, the software framework has two main modules: the Model Manager and the Solver modules. The Demand Assignment and Path Costs components are wrappers for an assignment per path, commodity and time, and for path travel costs respectively.
 
 The Model Manager has three components that correspond to the $F = \Sigma\circ c \circ \mathbb{T}$ composition function: the Traffic Model, Cost Function and Sum components. The State Trajectory module is a wrapper for the link states (e.g: flow per link), and the Link Cost module is a wrapper for the travel cost per link (e.g experienced travel time on a link). The Model Manager's role is to translate an assignment $h$, specified as a sequence of demand per path by the Demand Assignment module, into the corresponding path costs, represented as a sequence of cost per path.
 
@@ -153,7 +159,7 @@ The advantage of our modular software framework is that it can be easily extende
 \subsection{MN Model}
 \subsection{Point Queue Model}
 
-\section{Implemented Algorithms}
+\section{Implemented Solver Algorithms}
 
 \subsection{Method of Successive Averages}
 The Method of Successive Averages (MSA) is a heuristic-based algorithm and does not put any restriction on $F$. However, it does not guarantee convergence to the optimal solution for the general VI problem \cite{nie2010solving}. MSA is used to initialize the other algorithms. The algorithm's steps are described below:
@@ -194,6 +200,13 @@ Since $L$ can be difficult to predetermine in practice, \cite{nie2010solving} pr
 \end{enumerate}
 
 \section{Numerical Results}
+
+\xslnote{What input networks to consider?
+\begin{itemize}
+\item Synthetic network, can be as large as possible
+\item LA, and/or Chicago?
+\end{itemize}
+}
 
 \section{Conclusions}\label{sec:concl}
 
