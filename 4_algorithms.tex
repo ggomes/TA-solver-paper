@@ -1,11 +1,17 @@
 The experiments of Section \XXX involve several numerical algorithms for solving traffic assignment problems. These all follow the generic iteration depicted in Figure \ref{fig:iteartion}. In the figure, the top block represents function $F$, which maps candidate demand assignments $h^k$ into path costs $c^k$. The bottom block is a solver update function $U$, which updates the candidate assignment based on information from previous iterations. The index $k$ is incremented in each iteration, and the process continues until convergence is reached.
 
-The numerical algorithms use the \textit{all-or-nothing assignment at iteration $k$}, denoted with $y^k$, which is obtained by placing all of the demand for each OD pair $w$ onto paths whose entry in $c^k$ is minimum amongst paths in $\mathcal{P}_w$. To express this mathematically, we introduce the notation $c^k_p$ for the cost on path $p$ at iteration $k$, $c^k_w=\{c^k_p\}_{p\in\mathcal{P}_w$, and $y^k_p$ for the demand on path $p$ in the all-or-nothing assignment. Then,
+The numerical algorithms use the
+\textit{all-or-nothing assignment at iteration $k$}, denoted with $y^k$,
+which is obtained by placing all of the demand for each OD pair $w$ onto
+paths whose entry in $c^k$ is minimum amongst paths in $\mathcal{P}_w$.
+To express this mathematically, we introduce the notation $c^k_p$ for the
+cost on path $p$ at iteration $k$, $c^k_w=\{c^k_p\}_{p\in\mathcal{P}_w}$,
+and $y^k_p$ for the demand on path $p$ in the all-or-nothing assignment. Then,
 \begin{equation}
 \label{eq:allornothing}
 y^k_p = \left\{
 \begin{tabular}{ll}
-$d_w/s$ & $p\in\underset{p'\in\mathcal{P}_w}{\text{argmin }} c^k_{p'} \\
+$d_w/s$ & $p\in\underset{p'\in\mathcal{P}_w}{\text{argmin }} c^k_{p'} $ \\
 0 & otherwise
 \end{tabular}
 \right.
