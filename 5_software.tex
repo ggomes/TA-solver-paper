@@ -1,0 +1,16 @@
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figs/Software_Block_Diagram.PNG}
+    \caption{Software Framework Architecture}
+    \label{fig:Block_Diagram}
+\end{figure}
+
+Using the unified VI DTA formulation and the generic iteration shown in \ref{fig:iteartion}, we designed a modular and extensible
+software framework to solve DTA problems. As shown in Figure~\ref{fig:Block_Diagram}, the software framework has two main modules: the Model Manager and the Solver modules. The Demand Assignment and Path Costs components are wrappers for demand assignment $h$, and for path travel costs respectively $c$.
+
+The Model Manager has three components that correspond function $F$: the Traffic Model, Cost Function and Sum components. The State Trajectory module is a wrapper for link states (e.g: flow per link), and the Link Cost module is a wrapper for the travel cost per link (e.g experienced travel time on a link). The Model Manager's role is to translate an assignment $h$, specified as a sequence of demand per path by the Demand Assignment module, into the corresponding path costs, represented as a sequence of cost per path.
+
+The Solver module serves as an interface to plug in solution algorithms for DTA. The generic SOLVER works in a loop in which it generates candidate demand assignments, and expects to be given the corresponding network path costs. This loop continues until an equilibrium demand assignment is reached. 
+
+The advantage of our modular software framework is that it can be easily extended to address different DTA problems. The Traffic Model and Cost Function components interfaces enable a user to plug in different traffic models and cost functions to address diverse DTA problems. For example, the software framework currently include three traffic models: ST, MN, and CTM, which all integrate in the framework via the Traffic Model component. The framework has a travel time based cost function. A user can add an energy or emission based cost function. The Solver interface allows to incorporate different DTA solution algorithm. We included three solver algorithms: the MSA, the FW, and the EPM, which can be applied depending on the $F$ function properties. Finally, we also designed the whole Model Manager component as an interface, enabling a user to integrate an implementation of the $F$ composition function without having to use the Traffic model, Cost Function and Sum modules. This is useful for problems, such as simulation-based DTA problems, where the traffic model is tightly coupled with the cost function evaluation. The complete documentation on software framework, with installations instructions can be found at ...
+

@@ -16,3 +16,14 @@ The Solver class calls
 The advantage of our modular software framework is that it can be easily extended by building on existing traffic model, cost function, and solver classes. We developed the traffic model, cost function, and solve classes as basic building blocks for actual traffic models, cost functions, and solver algorithms that a user might want to implement.Users can expand on them using the inheritance concept in OOP. For example, the software framework currently include three traffic models: the static model, Merchant and Nemhauser (MN) model, and the Point Queue Model, which are all extensions of the basic traffic model class. It also has a cost function based on travel time, that can be replaced by an energy or emission based cost function. We included three solver algorithms: the Method of Successive Averages, the Frank-Wofle Algorithm, and the Extra Projection Methods, which are applied depending on the $F$ function properties. The demand assignment, state trajectory, link costs, and path costs classes provide the format for the input/output messages among the other modules, and are not extendable.  
 
 Given an assignment $h'$, a DTA solution algorithm needs the cost for each path, $F_p(h^')$ $\forall p\in\mathcal{P}$, to determine if $h'$ is an equilibrium assignment according to equation (x). Accordingly, a DTA solution algorithm implemented in the framework will use the Model Manager module via Solver interface to translate assignments to their corresponding path costs $F(h)$. The path costs allow the algorithm to determine whether it has reached equilibrium or whether/how it needs to adjust its current assignment to move towards the equilibrium state.
+
+\item Ziliaskopoulos and Waller developed VISTA,
+an internet-based geographic information system that integrates transportation spatio-temporal data and models into a single framework. While VISTA does integrate analytical and simulation-based DTA models along with DTA solution algorithms, it was built with particular focus on the integration of different transportation modules. This is unlike \textit{ta\_solver} that was designed to solve DTA problems. In addition, VISTA has no fundamental DTA problem formulation, while \textit{ta\_solver} is based on VI. 
+
+Currently
+Contributions:
+\begin{enumerate}
+\item A clear and unified variational inequality formulation for traffic assignment problems (with good notation).
+\item A modular software framework, \textit{ta\_solver},  with solvers based on the unified variational inequality formulation.
+\item Demonstration of the performance of the software framework using different models.
+\end{enumerate}
