@@ -10,10 +10,15 @@ The travel time on link $\ell$ is then computed as a function of the flow on lin
 \begin{equation}
 c_p(t) = \sum_{\ell\in p} \tau_\ell(f_\ell(t))
 \end{equation}
-In this equation we have used ``$\ell\in p$'' to denote links in path $p$, and ``$f_\ell$'' for the flow on link $\ell$. The function $\tau_\ell(\cdot)$ is the flow-to-travel time function. The most widely used version of $\tau_\ell(\cdot)$ is the BPR function (Bureau of Public Roads [KKK]). SAY SOMETHING ABOUT BPR. HOW IT IS CALIBRATED, WHO USES IT. The fact that $\tau_\ell$ depends only on its local flow implies the symmetry of $\nabla F$. Positive semidefiniteness results from the fact that perturbations to $h_p$ have a stronger effect on $c_p$ than on any other path. 
+In this equation we have used ``$\ell\in p$'' to denote links in path $p$, and ``$f_\ell$'' for the flow on link $\ell$. The function $\tau_\ell(\cdot)$ is the flow-to-travel time function. The most widely used version of $\tau_\ell(\cdot)$ is the BPR function (Bureau of Public Roads [KKK]),
+\begin{equation}
+\label{eq:bpr}
+\tau_\ell(f) = \tau^o_\ell\left( 1 + \gamma_\ell  \left( \frac{f}{\bar{f}_\ell} \right)^4 \right)
+\end{equation}
+Here, $\tau^o_\ell$ and $\bar{f}_\ell$ are respectively the free-flow travel time and the capacity of link $\ell$. $\gamma_\ell$ is a tunable parameter, typically set to 0.15 ([\XXX] https://en.wikibooks.org/wiki/Fundamentals_of_Transportation/Route_Choice). The fact that $\tau_\ell$ depends only on its local flow implies the symmetry of $\nabla F$. Positive semidefiniteness results from the fact that perturbations to $h_p$ have a stronger effect on $c_p$ than on any other path. 
 
 \subsection{Cell-transmission model (CTM)}
-The CTM was introduced by Daganzo in [LLL]. This model can be understood as a Godunov discretization of the hydrodynamic theory of Lighthill, Whitham, and Richards [MMM,NNN,OOO]. Here we describe the application of the CTM approach to the path-based setup of this paper. The state of the model is the number of vehicles in each link, segregated by path: $x_{\ell,p}(t)$. The state evolves according to,
+The CTM was introduced by Daganzo in \cite{daganzo1995cell}. This model can be understood as a Godunov discretization of the hydrodynamic theory of Lighthill, Whitham, and Richards [MMM,NNN,OOO]. Here we describe the application of the CTM approach to the path-based setup of this paper. The state of the model is the number of vehicles in each link, segregated by path: $x_{\ell,p}(t)$. The state evolves according to,
 \begin{equation}
 x_{\ell,p}(t+\Delta t) \;=\; x_{\ell,p}(t) \;+\; f^{in}_{\ell,p}(t) \;-\; f^{out}_{\ell,p}(t)
 \end{equation}
