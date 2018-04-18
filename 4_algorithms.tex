@@ -1,4 +1,4 @@
-The experiments of Section \XXX involve several numerical algorithms for solving traffic assignment problems. These all follow the generic iteration depicted in Figure \ref{fig:iteartion}. In the figure, the top block represents function $F$, which maps candidate demand assignments $h^k$ into path costs $c^k$. The bottom block is a solver update function $U$, which updates the candidate assignment based on information from previous iterations. The index $k$ is incremented in each iteration, and the process continues until convergence is reached.
+The experiments of Section~\ref{sec:experiments} involve several numerical algorithms for solving traffic assignment problems. These all follow the generic iteration depicted in Figure \ref{fig:iteartion}. In the figure, the top block represents function $F$, which maps candidate demand assignments $h^k$ into path costs $c^k$. The bottom block is a solver update function $U$, which updates the candidate assignment based on information from previous iterations. The index $k$ is incremented in each iteration, and the process continues until convergence is reached.
 
 The numerical algorithms use the
 \textit{all-or-nothing assignment at iteration $k$}, denoted with $y^k$,
@@ -28,8 +28,8 @@ Here $s$ is the size of the set $\underset{p'\in\mathcal{P}_w}{\text{argmin }} c
 \subsection{Frank-Wolfe Algorithm}
 
 The Frank-Wolfe Algorithm (FW) 
-\cite{fukushima1984modified,gartner1977analysis} 
-is a well-known method for solving convex optimization problems which is especially well suited for network problems. The algorithm has been used in the past to solve large-scale state traffic assignment problems [TTT].
+\cite{fukushima1984modified, gartner1977analysis} 
+is a well-known method for solving convex optimization problems which is especially well suited for network problems. The algorithm has been used in the past to solve large-scale state traffic assignment problems \cite{thai2016negative}.
 
 The update function $U$ of FW consists of the following steps:
 \begin{enumerate}

@@ -27,3 +27,5 @@ Contributions:
 \item A modular software framework, \textit{ta\_solver},  with solvers based on the unified variational inequality formulation.
 \item Demonstration of the performance of the software framework using different models.
 \end{enumerate}
+
+Finally, we also designed the whole Model Manager component as an interface, enabling a user to integrate an implementation of the $F$ composition function without having to use the Traffic model, Cost Function and Sum modules. This is useful for problems, such as simulation-based DTA problems, where the traffic model is tightly coupled with the cost function evaluation.
