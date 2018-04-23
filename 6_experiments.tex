@@ -14,7 +14,7 @@ The static assignment problem with BPR cost function is the simplest case of tra
 \begin{equation}
 \bar{f}^4 + \gamma\left(\;2(d_0-h_1)^4 - (d_1+h_1)^4 \;\right) = 0
 \end{equation}
-The root locus method [\XXX] can be applied here to track the trajectory of real solutions of this equation for $\gamma$'s ranging from zero to infinity. See Figure~\ref{fig:rlocus}. In the limit as $\gamma\rightarrow\infty$, the equilibrium value of $h_1$ decreases to 569.14 (the smallest real root of $2(d_0-h_1)^4 - (d_1+h_1)^4$), and $h_2=1300-h_1$ increases to 730.86. Thus, paradoxically, for $\gamma$ larger than a threshold, the number of vehicles that choose path 2 exceed those that choose path 1, even though path 2 is longer than path 1. This observation should be seen as a shortcoming of the BPR function as a model of travel time.
+The root locus method \cite{rootlocus} can be applied here to track the trajectory of real solutions of this equation for $\gamma$'s ranging from zero to infinity. See Figure~\ref{fig:rlocus}. In the limit as $\gamma\rightarrow\infty$, the equilibrium value of $h_1$ decreases to 569.14 (the smallest real root of $2(d_0-h_1)^4 - (d_1+h_1)^4$), and $h_2=1300-h_1$ increases to 730.86. Thus, paradoxically, for $\gamma$ larger than a threshold, the number of vehicles that choose path 2 exceed those that choose path 1, even though path 2 is longer than path 1. This observation should be seen as a shortcoming of the BPR function as a model of travel time.
 
 \begin{figure}[h]
     \centering
@@ -31,12 +31,7 @@ The root locus method [\XXX] can be applied here to track the trajectory of real
 \end{figure}
 
 \subsection{Dynamic assignment}
-
-
-Next we compute the dynamic equilibrium assignments under three different models: the MN model, the CTM model with instantaneous travel time, and the CTM with predictive travel time. The time period is 600 seconds. Demands are set to $d_0$=1300 and $d_1$=300 for time $\in[0,300]$ seconds, and $d_0$=$d_1$=0 thereafter. EPM was used to compute the solution, with an initial guess provided by MSA. The three solutions are shown in Figure~\ref{fig:ctm_vs_mn_hc}. Notice that according to MN, the optimal assignment places the entire demand on path 1 for all times before 300 seconds; ie link 2 remains unused. This is because MN does not propagate congestion upstream, and hence link 3 never slows down. This can be seen in Figure~\ref{fig:ctm_vs_mn_x}, where link 4 accumulates vehicles without bound up to 300 seconds. After 300 seconds, $d_0$=0, and hence links 2 and 3 empty out. 
-
-\ggnote{Need to check why c2-c1 under MN goes to zero after 300. Here link 3 has emptied out, so both 2 and 3 should be in free flow, and there should be a positive difference. Then also, why does it change around 500? Here link 4 empties, but this should not affect c2-c1. THere is a bug.}
-
+Next we compute the dynamic equilibrium assignments under three different models: the MN model, the CTM model with instantaneous travel time, and the CTM with predictive travel time. The time period is 600 seconds. Demands are set to $d_0$=1300 and $d_1$=300 for time $\in[0,300]$ seconds, and $d_0$=$d_1$=0 thereafter. EPM was used to compute the solution, with an initial guess provided by MSA. The three solutions are shown in Figure~\ref{fig:ctm_vs_mn_hc}. The optimal assignment under the MN model places all of $d_0$ on path 1 for all times before 300 seconds, and so link 2 remains unused. This is because MN does not propagate congestion upstream, and so link 3 never slows down. This can be seen in Figure~\ref{fig:ctm_vs_mn_x}, where link 4 accumulates vehicles without bound up to 300 seconds. 
 \begin{figure}[h]
     \centering
     \includegraphics[width=\linewidth]{figs/ctm_vs_mn_hc.png}
@@ -50,7 +45,7 @@ Next we compute the dynamic equilibrium assignments under three different models
     \caption{ctm vs mn x}
     \label{fig:ctm_vs_mn_x}
 \end{figure}
-The two CTM solutions on the other hand, display behavior that is more realistic. In both cases, the entire demand is initially sent on path 1, since $c_2-c_1$ is positive, as can be seen in Figure~\ref{fig:ctm_vs_mn_hc}. The congestion on link 4 spills to link 3 after around 100 seconds, and at this point $c_2-c_1$ begins to decrease. Notice that the predictive version of travel reacts before the congestion reaches link 3. The travel times on paths 1 and 2 are equalized at around 116 seconds for CTM predictive, and 121 seconds for CTM instantaneous. At this point, the demand is shifted entirely to path 2. The effect of this change is delayed by the travel time on link 0. In the meantime, $c_1$ continues to increase, and hence $c_2-c_1$ becomes negative. After the pulse reaches links 2 and 3, the travel time on path 1 decreases rapidly, and travel time on path 2 increases. $c_2-c_1$ again becomes positive, so demand is shifted once again to path 1, and another oscillation begins. 
+The two CTM solutions display behavior that is more realistic. In both cases, the entire demand is initially sent on path 1, since $c_2-c_1$ is positive, as can be seen in Figure~\ref{fig:ctm_vs_mn_hc}. The congestion on link 4 spills to link 3 after around 100 seconds, and at this point $c_2-c_1$ begins to decrease. Notice that the predictive version of travel time reacts before congestion reaches link 3. The travel times on paths 1 and 2 are equalized at around 116 seconds for CTM predictive, and 121 seconds for CTM instantaneous. At this point, the demand is shifted entirely to path 2. The effect of this change is delayed by the travel time on link 0. In the meantime, $c_1$ continues to increase, and hence $c_2-c_1$ becomes negative. After the pulse reaches links 2 and 3, the travel time on path 1 decreases rapidly, and travel time on path 2 increases. $c_2-c_1$ again becomes positive, and another oscillation begins. 
 
 \begin{figure}[h]
     \centering
@@ -58,7 +53,8 @@ The two CTM solutions on the other hand, display behavior that is more realistic
     \caption{peaks }
     \label{fig:peaks}
 \end{figure}
-An immediate question is whether these oscillations are realistic. We do not attempt here to answer this empirical question, but limit ourselves to a quantification of the size of the oscillation. Figure~\ref{fig:peaks} shows the maximum difference between consecutive peaks and valleys observed in the equilibrium assignment for a range of values for $d_0$ (from 900 vph to 1500 vph). Notice that the maximum oscillation with predictive travel time is uniformly smaller than that with instantaneous travel time. This is reasonable, \XXX EXPLAIN
+
+An immediate question is whether these oscillations are realistic. We do not attempt here to answer this question, but limit ourselves to a quantification of their size. Figure~\ref{fig:peaks} shows the maximum difference between consecutive peaks and valleys observed in the equilibrium assignment for a range of values for $d_0$ (from 900 vph to 1500 vph). Notice that the maximum oscillation with predictive travel time is uniformly smaller than that with instantaneous travel time. 
 
 \begin{figure}[h]
     \centering
@@ -67,17 +63,15 @@ An immediate question is whether these oscillations are realistic. We do not att
     \label{fig:dist2ctm}
 \end{figure}
 
+\ggnote{
 Finally, we compare these three equilibrium assignments -- denoted $h^*_{MN}$, $h^*_{CTMi}$, $h^*_{CTMp}$, for MN, CTM instantaneous and CTM predictive respectively -- in terms of their similarity to a Wardrop user equilibrium. The equilibrium condition can be expressed as a complementarity condition: $h^*$ is in equilibrium  if it is feasible and for all time $t$, all OD pairs $w$, and all paths $p\in\mathcal{P}_w$,
 \begin{equation}
 \label{eq:comp}
 h_p(t)\left(c_p(t)-\pi_w(t)\right) = 0
 \end{equation}
-Where $\pi_w(t)$ is the minimum travel time among paths in $\mathcal{P}_w$. The left hand side of Eq. (\ref{eq:comp}) is positive for all feasible assignments, and zero only for equilibrium assignments. Hence we can define a ``distance to Wardrop'' function as follows,
+Where $\pi_w(t)$ is the minimum travel time among paths in $\mathcal{P}_w$. The left hand side of Eq. (\ref{eq:comp}) is positive for all feasible assignments, and zero only for equilibrium assignments. Therefore the function,
 \begin{equation}
 \mathbb{D}[h](t) =\sum_w \sum_{p\in\mathcal{P}_w} h_p(t)\left(c_p(t)-\pi_w(t)\right)
 \end{equation}
-$\mathbb{D}[h](t)$ also depends on the model used to produce cost trajectories $c_p(t)$ from the assignment $h$. We use the CTM with predictive travel time for this, since is the model that most closely matches our intuition of what the outcome of this scenario should be. Denote with $F_p[h]$ the function that returns the travel time on path $p$ resulting applying the predictive CTM to assignment $h$. Then,
-\begin{equation}
-\mathbb{D}[h](t) =\sum_w \sum_{p\in\mathcal{P}_w} h_p(t)\left(F_p[h](t)-\pi_w(t)\right)
-\end{equation}
-
+can serve as a rough measure of `distance to Wardrop', although it should be kept in mind that it does not satisfy the triangle inequality nor the uniform scaling requirements of a norm. Computation $\mathbb{D}[h](t)$ requires a model to provide the travel times $c_p(t)$ corresponding to $h$. Here we use the CTM with predictive travel time, since it is the model that most closely matches our intuitions about the outcomes of the experiment. 
+}
