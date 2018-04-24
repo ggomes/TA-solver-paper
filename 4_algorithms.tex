@@ -16,7 +16,13 @@ $d_w/s$ & $p\in\underset{p'\in\mathcal{P}_w}{\text{argmin }} c^k_{p'} $ \\
 \end{tabular}
 \right.
 \end{equation}
-Here $s$ is the size of the set $\underset{p'\in\mathcal{P}_w}{\text{argmin }} c^k_{p'}$.
+Here $s$ is the size of the set $\underset{p'\in\mathcal{P}_w}{\text{argmin }} c^k_{p'}$. 
+The all-or-nothing assignment is also used in the algorithms' termination criterion, which is expressed with the following equation:
+\begin{equation}
+\label{termination_criterion}
+{\frac {\langle c^k,y^k-h^k \rangle} {\langle y^k, c^k\rangle}} \leq \epsilon
+\end{equation}
+Here $\epsilon$ is a small number close to zero. 
 
 \begin{figure}[h]
     \centering
@@ -39,7 +45,7 @@ The update function $U$ of FW consists of the following steps:
 \begin{equation}
 \begin{aligned}
 & \underset{\alpha}{\text{minimize}}
-& & F(h^k + \alpha\; d^k)\cdot d^k \\
+& & \langle F(h^k + \alpha\; d^k), d^k \rangle \\
 & \text{subject to}
 & & \alpha \in [0,1]
 \end{aligned}
@@ -47,7 +53,7 @@ The update function $U$ of FW consists of the following steps:
 \item $h^{k+1} = h^k +\alpha\; d^k$.
 \end{enumerate}
 
-Termination: $c^k(h^k-y^k) \leq \epsilon$
+Terminate if Eq. (\ref{termination_criterion}) is met.
 
 \subsection{Method of Successive Averages}
 The Method of Successive Averages (MSA) is a heuristic algorithm for solving variational inequalities. It does not put any restriction on $F$, However it also does not guarantee convergence to a solution  \cite{nie2010solving}.
@@ -58,7 +64,7 @@ The update function $U$ of MSA consists of the following steps:
 \item With step size $\alpha = 1/k$,  $h^{k+1} = (1-\alpha)h^k + \alpha y^k$. 
 \end{enumerate}
 
-Terminate if ${\frac {\langle c^k,y^k-h^k \rangle} {\langle y^k, c^k\rangle}} \leq \epsilon$
+Terminate if Eq. (\ref{termination_criterion}) is met.
 
 \subsection{Extra Projection Method}
 The Extra Projection Method (EPM) is based on the Euclidean projection operator, defined as,
@@ -75,19 +81,17 @@ The update function $U$ of EPM consists of the following steps:
 \item Evaluate $F(z^k)$.
 \item Find $h^{k+1} = \Pi_\mathcal{H}(h^k - \tau^k F(z^k))$
 \end{enumerate}
+Terminate if Eq. (\ref{termination_criterion}) is met.
+
 Since $L$ can be difficult to determine in practice, \cite{nie2010solving} proposes the following update equation for $\tau^k$:
 \begin{equation}
 \tau^{k+1} = \left\{
 \begin{tabular}{ll}
 $\sigma\;\tau^k$ & 
-if $y^{k+1}-y^k < 0$ and $\frac{|y^{k+1}-y^k|}{|y^k|}> \epsilon$ \\
+if $y^{k+1}-y^k < 0$ and $\frac{|y^{k+1}-y^k|}{|y^k|}> \mu$ \\
 $\tau^k$ & otherwise
 \end{tabular}
 \right.
 \end{equation}
 
-
-Termination:  If ${\frac {\langle c^k,y^k-h^k \rangle} {\langle y^k, c^k\rangle}} \leq \epsilon$
-
-
-Here $y^{k+1}$ and $y^k$ are the all-or-nothing assignments corresponding to $h^k$ and $h^{k+1}$ respectively. $\epsilon$ and $\sigma$ are positive scalars between 0 and 1.
+Here $y^{k+1}$ and $y^k$ are the all-or-nothing assignments corresponding to $h^k$ and $h^{k+1}$ respectively. $\mu$ and $\sigma$ are positive scalars between 0 and 1.

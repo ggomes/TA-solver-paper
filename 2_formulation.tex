@@ -22,7 +22,7 @@ h_p(t) &\geq 0 & \forall p\in\mathcal{P},\;\forall t\in[0,T] \\
 Denote the set of feasible demand assignments with $\mathcal{H}$. Notice that $\mathcal{H}$ is the product of $|\mathcal{W}|$ simplices.
 
 A demand assignment produces, through the traffic dynamics, a cost profile $c_p(t)$ for each path $p\in\mathcal{P}$. 
-A feasible demand assignment $h$ is also an \textit{equilibrium} assignment if its induced costs satisfy Wardrop's first principle[HHH]: 
+A feasible demand assignment $h$ is also an \textit{equilibrium} assignment if its induced costs satisfy Wardrop's first principle \cite{wardrop1952some}: 
 
 \noindent For each $w\in\mathcal{W}$ and $p\in \mathcal{P}_w$,
 \begin{equation}
@@ -40,7 +40,7 @@ $c$ is the collection of path costs $c_p(t)$. Notice that $\mathcal{C}$, like $\
 .... PROOF IS A VARIATIONAL INEQUALITY
 } 
 
-A feasible assignment $h^*$ is an equilibrium assignment if and only if \XXX it satisfies the variational inequality,
+As proven by Patriksson in \cite{patriksson2015traffic}, a feasible assignment $h^*$ is an equilibrium assignment if and only if \XXX it satisfies the variational inequality,
 \begin{equation}
 \label{eq:vi}
 \langle F(h^*), h-h^* \rangle \geq 0 \quad \forall h\in\mathcal{H}

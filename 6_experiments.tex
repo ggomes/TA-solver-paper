@@ -14,7 +14,11 @@ The static assignment problem with BPR cost function is the simplest case of tra
 \begin{equation}
 \bar{f}^4 + \gamma\left(\;2(d_0-h_1)^4 - (d_1+h_1)^4 \;\right) = 0
 \end{equation}
-The root locus method \cite{rootlocus} can be applied here to track the trajectory of real solutions of this equation for $\gamma$'s ranging from zero to infinity. See Figure~\ref{fig:rlocus}. In the limit as $\gamma\rightarrow\infty$, the equilibrium value of $h_1$ decreases to 569.14 (the smallest real root of $2(d_0-h_1)^4 - (d_1+h_1)^4$), and $h_2=1300-h_1$ increases to 730.86. Thus, paradoxically, for $\gamma$ larger than a threshold, the number of vehicles that choose path 2 exceed those that choose path 1, even though path 2 is longer than path 1. This observation should be seen as a shortcoming of the BPR function as a model of travel time.
+\todo[inline]{what is $\gamma$? Seems to not have been define, Juliette}
+The root locus method \cite{rootlocus} can be applied here to track the trajectory of real solutions of this equation for $\gamma$'s ranging from zero to infinity.
+
+% See Figure~\ref{fig:rlocus}. 
+In the limit as $\gamma\rightarrow\infty$, the equilibrium value of $h_1$ decreases to 569.14 (the smallest real root of $2(d_0-h_1)^4 - (d_1+h_1)^4$), and $h_2=1300-h_1$ increases to 730.86. Thus, paradoxically, for $\gamma$ larger than a threshold, the number of vehicles that choose path 2 exceed those that choose path 1, even though path 2 is longer than path 1. This observation should be seen as a shortcoming of the BPR function as a model of travel time.
 
 \begin{figure}[h]
     \centering
@@ -23,12 +27,12 @@ The root locus method \cite{rootlocus} can be applied here to track the trajecto
     \label{fig:static}
 \end{figure}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\linewidth]{figs/rlocus_mod.png}
-    \caption{Root locus.}
-    \label{fig:rlocus}
-\end{figure}
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=0.8\linewidth]{figs/rlocus_mod.png}
+%     \caption{Root locus.}
+%     \label{fig:rlocus}
+% \end{figure}
 
 \subsection{Dynamic assignment}
 Next we compute the dynamic equilibrium assignments under three different models: the MN model, the CTM model with instantaneous travel time, and the CTM with predictive travel time. The time period is 600 seconds. Demands are set to $d_0$=1300 and $d_1$=300 for time $\in[0,300]$ seconds, and $d_0$=$d_1$=0 thereafter. EPM was used to compute the solution, with an initial guess provided by MSA. The three solutions are shown in Figure~\ref{fig:ctm_vs_mn_hc}. The optimal assignment under the MN model places all of $d_0$ on path 1 for all times before 300 seconds, and so link 2 remains unused. This is because MN does not propagate congestion upstream, and so link 3 never slows down. This can be seen in Figure~\ref{fig:ctm_vs_mn_x}, where link 4 accumulates vehicles without bound up to 300 seconds. 
@@ -49,29 +53,38 @@ The two CTM solutions display behavior that is more realistic. In both cases, th
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.9\linewidth]{figs/peaks.png}
+    \includegraphics[width=0.8\linewidth]{figs/peaks.png}
     \caption{peaks }
     \label{fig:peaks}
 \end{figure}
 
-An immediate question is whether these oscillations are realistic. We do not attempt here to answer this question, but limit ourselves to a quantification of their size. Figure~\ref{fig:peaks} shows the maximum difference between consecutive peaks and valleys observed in the equilibrium assignment for a range of values for $d_0$ (from 900 vph to 1500 vph). Notice that the maximum oscillation with predictive travel time is uniformly smaller than that with instantaneous travel time. 
+An immediate question is whether these oscillations are realistic. We do not attempt here to answer this question, but limit ourselves to a quantification of their size. Figure~\ref{fig:peaks} shows the maximum difference between consecutive peaks and valleys observed in the equilibrium assignment for a range of values for $d_0$ (from 900 vph to 1500 vph). Notice that the maximum oscillation with predictive travel time is uniformly smaller than that with instantaneous travel time. It is not clear to us at this point whether these oscillations are a property of the equilibrium solutions, a consequence of the discretization scheme, or related to the numerical solution methods. 
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{figs/dist2ctm.png}
-    \caption{dist2ctm}
-    \label{fig:dist2ctm}
+    \includegraphics[width=\linewidth]{figs/DWardrop.png}
+    \caption{DWardrop}
+    \label{fig:dWardrop}
 \end{figure}
 
-\ggnote{
-Finally, we compare these three equilibrium assignments -- denoted $h^*_{MN}$, $h^*_{CTMi}$, $h^*_{CTMp}$, for MN, CTM instantaneous and CTM predictive respectively -- in terms of their similarity to a Wardrop user equilibrium. The equilibrium condition can be expressed as a complementarity condition: $h^*$ is in equilibrium  if it is feasible and for all time $t$, all OD pairs $w$, and all paths $p\in\mathcal{P}_w$,
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=\linewidth]{figs/dw.png}
+%     \caption{dw}
+%     \label{fig:dw}
+% \end{figure}
+
+Finally, we evaluate these three solutions in terms of their similarity to a Wardrop user equilibrium. To build a `distance to Wardrop' function, we express Wardrop's principle as a complementarity condition: $h^*$ is an equilibrium  if it is feasible and for all time $t$, all OD pairs $w$, and all paths $p\in\mathcal{P}_w$,
 \begin{equation}
 \label{eq:comp}
 h_p(t)\left(c_p(t)-\pi_w(t)\right) = 0
 \end{equation}
-Where $\pi_w(t)$ is the minimum travel time among paths in $\mathcal{P}_w$. The left hand side of Eq. (\ref{eq:comp}) is positive for all feasible assignments, and zero only for equilibrium assignments. Therefore the function,
+where $\pi_w(t)$ is the minimum travel time among paths in $\mathcal{P}_w$. The left hand side of Eq. (\ref{eq:comp}) is positive for all feasible assignments, and zero only for equilibrium assignments. Therefore the function,
 \begin{equation}
 \mathbb{D}[h](t) =\sum_w \sum_{p\in\mathcal{P}_w} h_p(t)\left(c_p(t)-\pi_w(t)\right)
 \end{equation}
-can serve as a rough measure of `distance to Wardrop', although it should be kept in mind that it does not satisfy the triangle inequality nor the uniform scaling requirements of a norm. Computation $\mathbb{D}[h](t)$ requires a model to provide the travel times $c_p(t)$ corresponding to $h$. Here we use the CTM with predictive travel time, since it is the model that most closely matches our intuitions about the outcomes of the experiment. 
-}
+can serve as a rough measure of `distance to Wardrop', although it does not satisfy the triangle inequality nor the uniform scaling requirements of a norm. Computation $\mathbb{D}[h](t)$ requires a model to provide the travel times $c_p(t)$ corresponding to $h$. Here we use the CTM with predictive travel time, since it is the model that most closely matches our intuitions about the outcomes of the experiment. The results are shown in Figure~\ref{fig:dWardrop}. Clearly the equilibrium due to the MN model is farther from a Wardrop equilibrium than either of the CTM results. A shortcoming of $\mathbb{D}[h](t)$ is that it only penalizes incorrect assignments $h(t)$ at time $t$. The lingering effects of vehicles sent on non-minimum paths are lost. If, however, the problem has a unique equilibrium solution, then the distance to that state trajectory can also be used to measure `distance to Wardrop'.
+\begin{equation}
+\mathbb{D}^x[h](t) = \sum_{l} ||x^{*}(t)-x(t)||
+\end{equation}
+Here, $x^{*}(t)$ and $x(t)$ are, respectively, the equilibrium state trajectory and the state trajectory due to $h$. This quantity is depicted in the lower plot of Figure~\ref{fig:dWardrop}. Notice that the error persists beyond $t$=300.
