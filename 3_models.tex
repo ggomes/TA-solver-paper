@@ -1,4 +1,6 @@
-In this paper we will make use of three traffic models: a static model (ST), the Merchant-Nemhauser model (MN) and the cell-transmission model (CTM). The static model will employ a link-based cost function, and therefore will be solvable with standard convex optimization techniques. The MN model, although dynamic, does not propagate congestion. Its Jacobian matrix is symmetric and positive semidefinite, and hence it can be posed as an optimal control problem. The CTM replicates the backward propagation of congestion, and must be treated with the more general techniques of variational inequalities. 
+%In this paper we will make use of three traffic models: a static model (ST), the Merchant-Nemhauser model (MN) and the cell-transmission model (CTM). 
+
+%The static model employs a link-based cost function, and therefore will be solvable with standard convex optimization techniques. The MN model, although dynamic, does not propagate congestion. Its Jacobian matrix is symmetric and positive semidefinite, and hence it can be posed as an optimal control problem. The CTM replicates the backward propagation of congestion, and must be treated with the more general techniques of variational inequalities. 
 
 \subsection{Static model (ST)}
 Use $\mathcal{L}$ to denote the set of all links in the traffic network. Then, under the static traffic model, the flow on a link $\ell\in\mathcal{L}$ is the sum of all demands on paths that include link $\ell$. This information is gathered into an incidence matrix 
@@ -12,15 +14,21 @@ The travel time on link $\ell$ is then computed as a function of the flow on lin
 \label{eq:statictt}
 c_p(t) = \sum_{\ell\in p} \tau_\ell(f_\ell(t))
 \end{equation}
-In this equation we have used ``$\ell\in p$'' to denote links in path $p$, and ``$f_\ell$'' for the flow on link $\ell$. The function $\tau_\ell(\cdot)$ is the flow-to-travel time function. The most widely used version of $\tau_\ell(\cdot)$ is the BPR function (Bureau of Public Roads \cite{wiki_Route_Choice}),
+%In this equation we have used ``$\ell\in p$'' to denote links in path $p$, and ``$f_\ell$'' for the flow on link $\ell$. 
+The function $\tau_\ell(\cdot)$ is the flow-to-travel time function. The most widely used version of $\tau_\ell(\cdot)$ is the BPR function \cite{wiki_Route_Choice},
 \begin{equation}
 \label{eq:bpr}
 \tau_\ell(f) = \tau^o_\ell\left( 1 + \gamma_\ell  \left( \frac{f}{\bar{f}_\ell} \right)^4 \right)
 \end{equation}
-Here, $\tau^o_\ell$ and $\bar{f}_\ell$ are respectively the free-flow travel time and the capacity of link $\ell$. $\gamma_\ell$ is a tunable parameter, typically set to 0.15 (\cite{wiki_Route_Choice}). The fact that $\tau_\ell$ depends only on its local flow implies the symmetry of $\nabla F$. Positive semidefiniteness results from the fact that perturbations to $h_p$ have a stronger effect on $c_p$ than on any other path. 
+$\tau^o_\ell$ and $\bar{f}_\ell$ are respectively the free-flow travel time and the capacity of link $\ell$. $\gamma_\ell$ is a tunable parameter, typically set to 0.15 \cite{wiki_Route_Choice}.
+This is a convex optimization problem.
+
+%The fact that $\tau_\ell$ depends only on its local flow implies the symmetry of $\nabla F$. Positive semidefiniteness results from the fact that perturbations to $h_p$ have a stronger effect on $c_p$ than on any other path. 
 
 \subsection{Cell-transmission model (CTM)}
-The CTM was introduced by Daganzo in \cite{daganzo1995cell}. This model can be understood as a Godunov discretization of the hydrodynamic theory of Lighthill, Whitham, and Richards \cite{whitham1955kinematic,richards1956shock}. Here we describe the application of the CTM approach to the path-based setup of this paper. The state of the model is the number of vehicles in each link, segregated by path: $x_{\ell,p}(t)$. The state evolves according to,
+The CTM was introduced by Daganzo in \cite{daganzo1995cell}. 
+%This model can be understood as a Godunov discretization of the hydrodynamic theory of Lighthill, Whitham, and Richards \cite{whitham1955kinematic,richards1956shock}. 
+Here we describe the application of the CTM approach to the path-based setup of our software. The state of the model is the number of vehicles in each link, segregated by path: $x_{\ell,p}(t)$. The state evolves according to,
 \begin{equation}
 x_{\ell,p}(t+\Delta t) \;=\; x_{\ell,p}(t) \;+\; f^{in}_{\ell,p}(t) \;-\; f^{out}_{\ell,p}(t)
 \end{equation}
@@ -29,7 +37,7 @@ where $\Delta t$ is the time step. The computation of the incoming and outgoing 
 s_\ell(t) &= S_\ell\left(\sum_{p} x_{\ell,p}(t)\right) \\
 d_{\ell,p}(t) &= D_\ell(x_{\ell,p}(t))
 \end{align}
-$S_\ell(\cdot)$ and $D_\ell(\cdot)$ are respectively decreasing and increasing functions of their arguments (related to the ``fundamental diagram'' of link $\ell$). The incoming and outgoing flows are computed according to a \textit{node function} which takes as arguments, for each node, the demands and supplies of all links incident on the node. There are several alternatives for the node function \cite{wright2017node,tampere2011generic}. These differ in the general case, but in the one-to-one case reduce to the original CTM formulation in which the total flow through the node is given by:
+$S_\ell(\cdot)$ and $D_\ell(\cdot)$ are respectively decreasing and increasing functions of their arguments. The incoming and outgoing flows are computed according to a \textit{node function} which takes as arguments, for each node, the demands and supplies of all links incident on the node. There are several alternatives for the node function, e.g.  \cite{wright2017node,tampere2011generic}. These differ in the general case, but in the one-to-one case reduce to the original CTM formulation in which the total flow through the node is given by:
 \begin{equation}
 \label{eq:f}
 f(t) = \min\left( \sum_{p}d_{\ell',p}(t) \; , \; s_{\ell''}(t)  \right)
@@ -41,23 +49,24 @@ f^{out}_{\ell',p}(t) = f^{in}_{\ell'',p}(t) = f(t)\frac{x_{\ell',p}(t)}{x_{\ell'
 $x_{\ell}(t) = \sum_{p} x_{\ell,p}(t)$ is the total number of vehicles in link $\ell$.
 
 \subsection{Merchant-Nemhauser model (MN)}
-In a seminal paper \cite{merchant1978model, merchant1978optimality}, Merchant and Nemhauser introduced a dynamical model for analyzing traffic assignment problems. Here we adapt the model to a path-based setting. In this context, the MN model can be understood as a special case of the CTM, in which the supply function $S_\ell(\cdot)$ is set to a constant value equal to the link capacity. The calculation of node flow of Eq. (\ref{eq:f}) then depends only on the demands in upstream links, $d_{\ell',p}(t)$, and hence backward propagation of information is not possible, and vehicles accumulate without bound in bottleneck links.
+In a seminal paper for DTA \cite{merchant1978model, merchant1978optimality}, Merchant and Nemhauser introduced a dynamical model for analyzing traffic assignment problems. The MN model can be understood as a special case of the CTM, in which the supply function $d_\ell(\cdot)$ is set to a constant value equal to the link capacity. The calculation of node flow of Eq. (\ref{eq:f}) then depends only on the demands in upstream links, $d_{\ell',p}(t)$, hence backward propagation of information is not possible, and vehicles accumulate without bound in bottleneck links.
 
 \subsection{Travel time calculation for the CTM and MN models}
-The path cost function $c_p(t)$ represents the travel time for a vehicle departing at time $t$ and traveling along path $p$ to its destination. It is calculated by accumulating the travel time on each link in path $p$. Two types of travel time calculation can be used: \textit{instantaneous} travel time and \textit{actual} travel time. The instantaneous travel time $c_p^{inst}(t)$ is obtained by summing the link travel times at the moment of departure:
+The path cost function $c_p(t)$ represents the travel time for a vehicle departing at time $t$ and traveling along path $p$ to its destination. It is calculated by accumulating the travel time on each link in path $p$. Two types of travel time calculation can be used: \textit{instantaneous} travel time and \textit{actual} travel time. The `instantaneous travel time on path $p$', $c_p^{inst}(t)$ is:
 \begin{equation}
 c_p^{inst}(t) = \sum_{\ell\in p} \tau_\ell(t)
 \end{equation}
-Here $\tau_\ell(t)$ is the travel time on link $\ell$ at time $t$. The actual travel time $c_p^{act}(t)$ is obtained by sequential accumulation of the travel times for each of the links in the path.
+Here $\tau_\ell(t)$ is the travel time on link $\ell$ at time $t$. The `actual travel time' $c_p^{act}(t)$ is obtained by sequential accumulation of the travel times for each of the links in the path, each shifted by its travel time.
 \begin{equation}
-t^{enter}_{\ell+1} = t^{exit}_{\ell} = t^{enter}_{\ell} + \tau_{\ell}(t^{enter}_{\ell})
+t^{enter}_{n(\ell)} = t^{exit}_{\ell} = t^{enter}_{\ell} + \tau_{\ell}(t^{enter}_{\ell})
 \end{equation}
-With some abuse of notation, $\ell+1$ here represents the link following $\ell$ along path $p$.
-Initializing this computation with $t^{enter}_{0}=0$, then $c_p^{act}(t)$ is the exit time for the last link in the path.
+$n(\ell)$ is the link following $\ell$ along path $p$.
+$c_p^{act}(t)$ is the exit time for the last link in the path.
+We compute $\tau_\ell(t)$ with $\tau_\ell(t) = \Delta t \; \frac{x_\ell(t)}{f_\ell(t)}$. The technique of \cite{newell1993simplified} is also available, but was not used in this paper.
 
-Two approaches are common for computing $\tau_\ell(t)$. The first relies on a definition of speed in the CTM as flow / density, and travel time as distance / speed. Considering units, one obtains,
-\begin{equation}
-\tau_\ell(t) = \Delta t \; \frac{x_\ell(t)}{f_\ell(t)}
-\end{equation}
-This formula has the caveat that $\tau_\ell(t)$ equals the free-flow travel time if either $x_\ell(t)$ or $f_\ell(t)$ equal zero. The second method, introduced by \cite{newell1993simplified}, uses the cumulative flow at the boundaries of the link. 
 
+% Two approaches are common for computing $\tau_\ell(t)$. The first relies on a definition of speed in the CTM as flow / density, and travel time as distance / speed. Considering units, one obtains,
+% \begin{equation}
+% \tau_\ell(t) = \Delta t \; \frac{x_\ell(t)}{f_\ell(t)}
+% \end{equation}
+% This formula has the caveat that $\tau_\ell(t)$ equals the free-flow travel time if either $x_\ell(t)$ or $f_\ell(t)$ equal zero. The second method, introduced by \cite{newell1993simplified}, uses the cumulative flow at the boundaries of the link. We will not use this approach in this paper. 

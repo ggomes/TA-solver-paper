@@ -1,15 +1,14 @@
 The goal of the problem is to find a demand assignment that produces an equilibrium state trajectory in the sense of Wardrop\cite{wardrop1952some}. The traffic network  is represented as a graph. Vehicles enter and exit the network through origin and destination nodes. They travel through the network following \textit{paths}. 
-% Vehicles can be categorized according to their \textit{type}, which may encode different levels of access to information (e.g. using or not using routing apps), access to particular routes (e.g. HOV versus LOV), or driving characteristics (e.g. cars versus trucks).
 
 \vspace{1em}
 
 \begin{tabular}{ll}
 $w\in\mathcal{W}$ & all origin-destination (OD) pairs. \\ 
 $d_w : [0,T]\rightarrow \mathbb{R}^+ $  & Demand for OD pair $w\in\mathcal{W}$. \\ 
-$\mathcal{P}_w$ & Available paths for $w\in\mathcal{W}$. \\
+$\mathcal{P}_w$ & Set of available paths for $w\in\mathcal{W}$. \\
 $\mathcal{P}=\{ \mathcal{P}_w \}_{w\in \mathcal{W}}$ & All paths. \\ 
 $h_p : [0,T]\rightarrow \mathbb{R}^+ $ & Demand on path $p$. \\
-$h=\{h_p | p\in\mathcal{P}\}$ : & Demand assignment
+$h=\{h_p | p\in\mathcal{P}\}$ : & Demand assignment.
 \end{tabular}
 
 \vspace{1em}
@@ -19,10 +18,10 @@ The demand $d_w$ for an OD pair $w\in\mathcal{W}$ is, in general, a function of 
 h_p(t) &\geq 0 & \forall p\in\mathcal{P},\;\forall t\in[0,T] \\
 \sum_{p\in \mathcal{P}_w} h_p(t) &= d_w(t) & \forall w\in\mathcal{W}  ,\;\forall t\in[0,T] 
 \end{align}
-Denote the set of feasible demand assignments with $\mathcal{H}$. Notice that $\mathcal{H}$ is the product of $|\mathcal{W}|$ simplices.
+Denote the set of feasible demand assignments with $\mathcal{H}$. %Notice that $\mathcal{H}$ is the product of $|\mathcal{W}|$ simplices.
 
 A demand assignment produces, through the traffic dynamics, a cost profile $c_p(t)$ for each path $p\in\mathcal{P}$. 
-A feasible demand assignment $h$ is also an \textit{equilibrium} assignment if its induced costs satisfy Wardrop's first principle \cite{wardrop1952some}: 
+A feasible demand assignment $h$ is also an \textit{equilibrium} assignment if its induced cost satisfies Wardrop's first principle: 
 
 \noindent For each $w\in\mathcal{W}$ and $p\in \mathcal{P}_w$,
 \begin{equation}
@@ -34,20 +33,17 @@ We denote the map from demand assignments to path costs with $F : \mathcal{H}\ri
 \begin{equation}
 c = F(h)
 \end{equation}
-$c$ is the collection of path costs $c_p(t)$. Notice that $\mathcal{C}$, like $\mathcal{H}$, is a space of functions on $[0,T]$ of dimension $|\mathcal{P}|$. 
+$c$ is the collection of path costs $c_p(t)$.
+%Notice that $\mathcal{C}$, like $\mathcal{H}$, is a space of functions on $[0,T]$ of dimension $|\mathcal{P}|$. 
 
-\ggnote{
-.... PROOF IS A VARIATIONAL INEQUALITY
-} 
-
-As proven by Patriksson in \cite{patriksson2015traffic}, a feasible assignment $h^*$ is an equilibrium assignment if and only if \XXX it satisfies the variational inequality,
+As proven in \cite{patriksson2015traffic}, a feasible assignment $h^*$ is an equilibrium assignment if and only if it satisfies the variational inequality,
 \begin{equation}
 \label{eq:vi}
 \langle F(h^*), h-h^* \rangle \geq 0 \quad \forall h\in\mathcal{H}
 \end{equation}
-Nagurney \cite{nagurney2013network} provides proofs of existence and uniqueness of solutions to (\ref{eq:vi}), respectively under conditions of continuity and strict monotonicity of $F$. It should be noted however that strict monotonicity is not generally to be expected of traffic, since the addition of a single vehicle to a nearly empty network may not affect the travel time of any single driver.
+\cite{nagurney2013network} provides proofs of existence and uniqueness of solutions to (\ref{eq:vi}), respectively under conditions of continuity and strict monotonicity of $F$. It should be noted however that strict monotonicity is not generally to be expected of traffic, since the addition of a single vehicle to a nearly empty network may not affect the travel time of any single driver.
 
-In the case that $F$ is continuously differentiable and its Jacobian $\nabla F$ is positive semidefinite everywhere in $\mathcal{H}$, there exists a scalar function $f:\mathcal{H}\rightarrow \mathbb{R}$ such that $\nabla f = F$, and solutions to (\ref{eq:vi}) are also solutions to the following optimization problem,
+In the case that there exists a convex function $f$ such that $F=\nabla f$ ($F$ is monotone and $\nabla F$ is positive semi-definite), the problem can be posed as an optimization problem,
 \begin{equation}
 \label{eq:opt}
 \begin{aligned}
@@ -57,9 +53,15 @@ In the case that $F$ is continuously differentiable and its Jacobian $\nabla F$ 
 & & h \in \mathcal{H}
 \end{aligned}
 \end{equation}
-Thus we can classify traffic assignment problems into two broad categories: those with positive semidefinite Jacobians, which are optimization problems, and the more general problems, which remain as variational inequalities. It is worth considering the phenomena that are lost in using path cost functions $F$ with positive semi-definite Jacobians. The symmetry of $\nabla F$ means that an additional unit of demand on any path $p$ has the same effect on another path $p'$ as an additional unit of demand on path $p'$ would have on $p$. This assumption precludes at least two important features of traffic models:
-\begin{enumerate}
-\item \textit{permissive left turns}: At intersections, vehicles are often allowed to turn left through gaps in oncoming traffic. When the flow of oncoming traffic is large, then these gaps are rare, and vehicles must wait longer to turn. However, because the oncoming traffic has the right-of-way, their travel times are not impacted by the number of vehicles waiting to turn left. 
-\item \textit{backward propagation of congestion}: One of the essential features of traffic dynamics is that regions of high density propagate upstream. Consider two paths $p$ and $p'$ that cross at an intersection. Paths $p$ is nearly empty, but $p'$ is congested up to the intersection. An additional vehicle on $p'$ will block the intersection, and thus obstruct vehicles on $p$, but an additional vehicle on $p$ has no effect on $p'$.
-\end{enumerate}
-A second level of classification relates to whether the function $F$ is static or dynamic. Within optimization-based traffic assignment, these two types have naturally been treated using the techniques of mathematical programming and optimal control respectively. If the function $F(h)$ is monotone (strictly monotone), then $f(h)$ is convex (strictly convex).
+Thus we can classify traffic assignment problems into two  categories: those with positive semidefinite Jacobians, which are optimization problems, and the more general problems, which remain as variational inequalities. It is worth considering the phenomena that are lost in using models with symmetric Jacobians: an additional unit of demand on any path $p$ has the same effect on another path $p'$ as an additional unit of demand on path $p'$ would have on $p$. This assumption precludes the upstream propagation of congestion - an essential feature for dynamic applications.
+% at least two important features of traffic models:
+% \begin{enumerate}
+% \item \textit{permissive left turns}: oncoming traffic has priority vo 
+% At intersections, vehicles are often allowed to turn left through gaps in oncoming traffic. When the flow of oncoming traffic is large, these gaps are rare, and vehicles must wait longer to turn. However, because the oncoming traffic has the right-of-way, their travel times are not impacted by the number of vehicles waiting to turn left. 
+% \item \textit{backward propagation of congestion}: One of the essential features of traffic dynamics is that regions of high density propagate upstream. Consider two paths $p$ and $p'$ that cross at an intersection. Path $p$ is nearly empty, but $p'$ is congested up to the intersection. An additional vehicle on $p'$ will block the intersection, and thus obstruct vehicles on $p$, but an additional vehicle on $p$ has no effect on $p'$.
+% \end{enumerate}
+
+A second level of classification relates to whether $F$ is static or dynamic. The numerical algorithms we use to solve variational inequalities are generic and do not distinguish between static and dynamic problems.
+
+
+%Within optimization-based traffic assignment, these two types have naturally been treated using the techniques of mathematical programming and optimal control respectively. If the function $F(h)$ is monotone (strictly monotone), then $f(h)$ is convex (strictly convex).
